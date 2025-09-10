@@ -1,0 +1,13 @@
+[workspace]
+authors = ["Tomas Pecukevicius <pecukevicius@gmail.com>"]
+channels = ["conda-forge"]
+name = "repo_checker"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+pixi-pycharm = ">=0.0.8,<0.0.9"
+python = "3.13.*"
+pandas = ">=2.3.2,<3"
