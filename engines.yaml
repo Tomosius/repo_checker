@@ -1,0 +1,57 @@
+# repo_checker/engines.yaml
+engines:
+  - id: pypi
+    label: PyPI
+    url: "https://pypi.org/pypi/{q}/json"
+    method: GET
+    # For PyPI, existence == HTTP 200
+    exists:
+      kind: status_is
+      code: 200
+
+  - id: anaconda_any
+    label: Anaconda (any channel)
+    url: "https://api.anaconda.org/search?q=name:{q}&package_type=conda"
+    method: GET
+    # Response is a JSON list; we check if any pkg.name equals {q} (case-insensitive, '_' -> '-')
+    exists:
+      kind: json_any_eq
+      path: "$[*].name"
+      equals: "{q}"
+      normalize:
+        to_lower: true
+        replace_underscores_with_dashes: true
+
+  - id: conda_forge
+    label: conda-forge
+    url: "https://api.anaconda.org/search?q=name:{q}&package_type=conda"
+    method: GET
+    # Same list, but also owner must be 'conda-forge'
+    exists:
+      kind: json_any_match
+      where:
+        - path: "$[*].name"
+          equals: "{q}"
+          normalize:
+            to_lower: true
+            replace_underscores_with_dashes: true
+        - path: "$[*].owner"
+          equals: "conda-forge"
+
+  - id: github
+    label: GitHub
+    url: "https://api.github.com/search/repositories?q={q}+in:name&per_page=10"
+    method: GET
+    headers:
+      Accept: "application/vnd.github+json"
+      User-Agent: "name-availability-checker"
+      # env var expansion; omitted if not present
+      Authorization: "Bearer ${GITHUB_TOKEN}"
+    throttle:
+      max_per_minute: 9          # only applies when no token
+      env_bypass: "GITHUB_TOKEN" # if this env var exists, skip throttle
+    # How to extract fields from JSON
+    result:
+      count_path: "$.total_count"
+      exact_any_path: "$.items[*].name"   # exact if any equals {q} (case-insensitive)
+      urls_path: "$.items[*].html_url"    # take up to 10

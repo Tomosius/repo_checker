@@ -1,4 +1,4 @@
 name,pypi,conda_forge,anaconda_any,github_count,github_exact,github_top_urls
-datamorph,True,False,False,57,True,https://github.com/davideganna/DataMorphers;https://github.com/clare-lindley/datamorph;https://github.com/erawatti/DataMorph;https://github.com/CodexCasper/DataMorph;https://github.com/rdev-byte/DataMorph;https://github.com/mbcrocci/datamorph;https://github.com/NewtonDM/DataMorph;https://github.com/jerson1207/DataMorph;https://github.com/devtosun/datamorph;https://github.com/Joe-Baldwin/DataMorph
+datamorph,True,False,False,0,False,
 edamorph,False,False,False,0,False,
-morphfit,False,False,False,2,True,https://github.com/JyothiPriya5/MorphFit;https://github.com/j-hive/morphfits
+morphfit,False,False,False,0,False,
