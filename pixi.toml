@@ -6,7 +6,7 @@ platforms = ["osx-arm64"]
 version = "0.1.0"
 
 [tasks]
-check = "python main.py --in names.csv --out results.csv --print"
+check = "python  main.py --in names.csv --out results.csv --print"
 
 [dependencies]
 pixi-pycharm = ">=0.0.8,<0.0.9"

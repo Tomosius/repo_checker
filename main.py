@@ -4,7 +4,7 @@ import os, json, time, threading, argparse, sys, urllib.request, urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import deque
 from typing import List, Dict, Tuple
-from src.io_names import read_names_csv, write_results_csv, write_results_json
+from input_output import read_names, write_results
 
 # ---------- HTTP helper
 def http_json(url: str, headers=None, timeout=25) -> Tuple[int, dict]:
@@ -119,7 +119,8 @@ def parse_args(argv=None):
 
 def main(argv=None) -> int:
     args = parse_args(argv)
-    names = read_names_csv(args.in_csv)
+    names = read_names(args.in_csv, fmt="csv")
+
     if not names:
         print("No names found in input CSV.", file=sys.stderr)
         return 2
@@ -138,11 +139,7 @@ def main(argv=None) -> int:
 
     # deterministic out
     results.sort(key=lambda d: d["name"].lower())
-    if args.format == "csv":
-        write_results_csv(args.out_path, results)
-    else:
-        write_results_json(args.out_path, results)
-    return 0
+    write_results(args.out_path, results, fmt=args.format)  # csv|json
 
 if __name__ == "__main__":
     raise SystemExit(main())
